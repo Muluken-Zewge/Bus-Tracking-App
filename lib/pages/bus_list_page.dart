@@ -42,14 +42,14 @@ class BusListPage extends StatelessWidget {
         apiKey: 'C9Q9Y9SR9WCTGQFH'),
     Bus(
         id: '47861',
-        startLocation: 'Hospital',
-        destination: 'Agip',
+        startLocation: 'Merkato',
+        destination: 'Ferenj Arada',
         channelId: '2544299',
         apiKey: 'C9Q9Y9SR9WCTGQFH'),
     Bus(
         id: '00035',
         startLocation: 'Ferenj Arada',
-        destination: 'Airport',
+        destination: 'Ajip',
         channelId: '2546299',
         apiKey: 'C9Q9Y9SR9WCTGQFH'),
     Bus(

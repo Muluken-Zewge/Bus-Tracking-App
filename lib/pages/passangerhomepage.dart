@@ -1,3 +1,4 @@
+import 'package:final_project_demo/pages/about_us_page.dart';
 import 'package:final_project_demo/pages/available_bus_page.dart';
 import 'package:final_project_demo/pages/bus_list_page.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +32,28 @@ class PassangerHomePage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(0),
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.orange),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Colors.orange),
+              child: Stack(
                 children: [
-                  Text(
-                    "WELCOME",
-                    style: TextStyle(fontSize: 28),
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/bus.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'WELCOME',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -48,22 +62,16 @@ class PassangerHomePage extends StatelessWidget {
               leading: const Icon(Icons.directions_bus),
               title: const Text('Bus List'),
               onTap: () {
-                Navigator.pop(context);
+                //Navigator.pop(context);
                 Get.to(() => BusListPage());
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.newspaper),
-              title: const Text('Report'),
-              onTap: () {
-                Navigator.pop(context);
               },
             ),
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('About Us'),
               onTap: () {
-                Navigator.pop(context);
+                //Navigator.pop(context);
+                Get.to(() => const AboutUsPage());
               },
             ),
           ],
@@ -74,12 +82,16 @@ class PassangerHomePage extends StatelessWidget {
         decoration: const BoxDecoration(color: Color(0xFFFF9B37)),
         child: Column(
           children: [
-            textFieldPart(context),
+            Container(color: Colors.orange, child: textFieldPart(context)),
             const Divider(
               color: Colors.white,
               height: 1,
             ),
-            Expanded(child: googleM(context)),
+            Expanded(
+                child: Container(
+              color: Colors.white,
+              child: googleM(context),
+            )),
           ],
         ),
       ),
@@ -204,7 +216,7 @@ class PassangerHomePage extends StatelessWidget {
                       ulController.user.value.latitude ?? 7.670190,
                       ulController.user.value.longitude ?? 36.833359,
                     ),
-                    zoom: 14),
+                    zoom: 16),
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
