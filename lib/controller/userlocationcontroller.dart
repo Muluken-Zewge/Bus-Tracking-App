@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:final_project_demo/Model/bus_user.dart';
-import 'package:final_project_demo/services/userlocation.dart';
+import 'package:Bus_Tracking_App/Model/bus_user.dart';
+import 'package:Bus_Tracking_App/services/userlocation.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 

@@ -1,6 +1,6 @@
-import 'package:final_project_demo/pages/about_us_page.dart';
-import 'package:final_project_demo/pages/available_bus_page.dart';
-import 'package:final_project_demo/pages/bus_list_page.dart';
+import 'package:Bus_Tracking_App/pages/about_us_page.dart';
+import 'package:Bus_Tracking_App/pages/available_bus_page.dart';
+import 'package:Bus_Tracking_App/pages/bus_list_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '/controller/userlocationcontroller.dart';

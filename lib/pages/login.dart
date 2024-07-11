@@ -1,4 +1,4 @@
-import 'package:final_project_demo/pages/register.dart';
+import 'package:Bus_Tracking_App/pages/register.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

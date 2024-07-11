@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-//import 'package:get/get.dart';
 import '/services/thing_speak_service.dart';
 import '/util/location_util.dart';
 import 'bus_list_page.dart';
 
-class BusComparePage extends StatelessWidget {
+class BusComparePage extends StatefulWidget {
   final String destination;
   final double startLatitude;
   final double startLongitude;
@@ -18,11 +17,24 @@ class BusComparePage extends StatelessWidget {
     required this.availableBuses,
   });
 
+  @override
+  _BusComparePageState createState() => _BusComparePageState();
+}
+
+class _BusComparePageState extends State<BusComparePage> {
+  late Future<List<Map<String, dynamic>>> _busDataFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _busDataFuture = _fetchAllBusData();
+  }
+
   Future<List<Map<String, dynamic>>> _fetchAllBusData() async {
     List<Map<String, dynamic>> busDataList = [];
     ThingSpeakService thingSpeakService = ThingSpeakService();
 
-    for (var bus in availableBuses) {
+    for (var bus in widget.availableBuses) {
       try {
         var busData =
             await thingSpeakService.fetchLatestData(bus.channelId, bus.apiKey);
@@ -36,14 +48,27 @@ class BusComparePage extends StatelessWidget {
     return busDataList;
   }
 
+  void _refreshData() {
+    setState(() {
+      _busDataFuture = _fetchAllBusData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bus List'),
+        title: const Text('Recommended Bus'),
+        backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _refreshData,
+          ),
+        ],
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _fetchAllBusData(),
+        future: _busDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -53,55 +78,72 @@ class BusComparePage extends StatelessWidget {
             return const Center(child: Text('No data available'));
           } else {
             final busDataList = snapshot.data!;
-            final approachingBuses = busDataList.where((busData) {
+
+            // Filter out stopped buses
+            final movingBuses =
+                busDataList.where((busData) => !busData['isStopped']).toList();
+
+            // Check if there are any moving buses
+            if (movingBuses.isEmpty) {
+              return const Center(
+                  child: Text('All assigned buses are stopped right now.'));
+            }
+
+            // Filter for approaching buses
+            final approachingBuses = movingBuses.where((busData) {
               final currentDistance = LocationUtils.calculateDistance(
                 busData['currentLatitude'],
                 busData['currentLongitude'],
-                startLatitude,
-                startLongitude,
+                widget.startLatitude,
+                widget.startLongitude,
               );
               final previousDistance = LocationUtils.calculateDistance(
                 busData['previousLatitude'],
                 busData['previousLongitude'],
-                startLatitude,
-                startLongitude,
+                widget.startLatitude,
+                widget.startLongitude,
               );
               return previousDistance > currentDistance;
             }).toList();
 
+            // Check if there are any approaching buses
             if (approachingBuses.isEmpty) {
               return const Center(
                   child: Text(
                       'No bus is approaching you, please check back later.'));
             }
 
+            // Sort the approaching buses by distance
             approachingBuses.sort((a, b) {
               final distanceA = LocationUtils.calculateDistance(
                 a['currentLatitude'],
                 a['currentLongitude'],
-                startLatitude,
-                startLongitude,
+                widget.startLatitude,
+                widget.startLongitude,
               );
               final distanceB = LocationUtils.calculateDistance(
                 b['currentLatitude'],
                 b['currentLongitude'],
-                startLatitude,
-                startLongitude,
+                widget.startLatitude,
+                widget.startLongitude,
               );
               return distanceA.compareTo(distanceB);
             });
 
+            // Get the closest bus
             final closestBus = approachingBuses.first;
             final closestBusDistance = LocationUtils.calculateDistance(
               closestBus['currentLatitude'],
               closestBus['currentLongitude'],
-              startLatitude,
-              startLongitude,
+              widget.startLatitude,
+              widget.startLongitude,
             );
             final closestBusETA = LocationUtils.calculateETA(
               closestBusDistance,
               closestBus['currentSpeed'],
             );
+
+            final closestBusETAMinutes = closestBusETA * 60;
 
             return Center(
               child: Column(
@@ -113,7 +155,7 @@ class BusComparePage extends StatelessWidget {
                       'Distance to bus: ${closestBusDistance.toStringAsFixed(2)} km'),
                   const SizedBox(height: 10),
                   Text(
-                      'Estimated time of arrival: ${closestBusETA.toStringAsFixed(2)} hours'),
+                      'Estimated time of arrival: ${closestBusETAMinutes.toStringAsFixed(2)} minutes'),
                   const SizedBox(height: 10),
                   const Text('The bus is approaching you.'),
                 ],

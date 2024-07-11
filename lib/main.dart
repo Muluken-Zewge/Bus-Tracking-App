@@ -1,5 +1,5 @@
 //import 'package:final_project_demo/pages/login.dart';
-import 'package:final_project_demo/pages/passangerhomepage.dart';
+import 'package:Bus_Tracking_App/pages/passangerhomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //title: const Text('Bus Management System'),
         backgroundColor: Colors.orange,
       ),
       body: Container(
@@ -61,14 +60,17 @@ class _HomePageState extends State<HomePage> {
                     fontStyle: FontStyle.normal,
                     fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 120),
-              const Text(
-                'Choose your role',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.bold),
+              const SizedBox(height: 130),
+              const Center(
+                child: Text(
+                  'You are reconized as a Passanger\nClick "Continue" to Proceed',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 21,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(height: 20.0),
               MaterialButton(
@@ -85,28 +87,11 @@ class _HomePageState extends State<HomePage> {
                 },
                 color: Colors.amber,
                 child: const Text(
-                  'Passanger',
+                  'Continue',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
               const SizedBox(height: 30.0),
-              // MaterialButton(
-              //     shape: const RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              //     ),
-              //     elevation: 5.0,
-              //     height: 40,
-              //     onPressed: () {
-              //       Navigator.push(
-              //           context,
-              //           MaterialPageRoute(
-              //               builder: ((context) => const LoginPage())));
-              //     },
-              //     color: Colors.amber,
-              //     child: const Text(
-              //       'Driver',
-              //       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-              //     ))
             ],
           ),
         ),
